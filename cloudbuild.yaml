@@ -33,7 +33,7 @@ steps:
      - | 
         terraform apply --auto-approve
 
-        - id: 'tf refresh'
+   - id: 'tf refresh'
      name: 'hashicorp/terraform:latest'
      entrypoint: 'sh'
      args:
@@ -41,7 +41,7 @@ steps:
      - | 
         terraform refresh --auto-approve
 
-           - id: 'tf apply'
+   - id: 'tf apply'
      name: 'hashicorp/terraform:latest'
      entrypoint: 'sh'
      args:
