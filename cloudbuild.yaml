@@ -32,4 +32,20 @@ steps:
      - '-c'
      - | 
         terraform apply --auto-approve
+
+        - id: 'tf apply'
+     name: 'hashicorp/terraform:latest'
+     entrypoint: 'sh'
+     args:
+     - '-c'
+     - | 
+        terraform apply --auto-approve
+
+        - id: 'tf apply'
+     name: 'hashicorp/terraform:latest'
+     entrypoint: 'sh'
+     args:
+     - '-c'
+     - | 
+        terraform apply --auto-approve
          
