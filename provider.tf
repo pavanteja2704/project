@@ -1,5 +1,5 @@
 provider "google" {
-  region = "us-east1"
+  region = "us-central1"
   project = "rohit-project-417811"
 }
  
