@@ -1,5 +1,5 @@
 resource "google_compute_instance" "web" {
-  name         = "web-instance-1"
+  name         = "web-instance-2"
   machine_type = "custom-2-8192" // 4 cores, 8GB memory
   zone         = "us-central1-b"
  
