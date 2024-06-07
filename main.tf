@@ -1,11 +1,13 @@
 resource "google_compute_instance" "web" {
-  name         = "web-instance"
-  machine_type = "custom-2-8192" // 4 cores, 8GB memory
-  zone         = "us-central1-b"
+  name         = "web-instance-1"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+
+  tags = ["http-server"]
  
   boot_disk {
     initialize_params {
-      image = "rhel-cloud/rhel-9" // RHEL 9 image
+      image =  "debian-cloud/debian-11" //rhel-cloud/rhel-9 
       size  = 50 // 50 GB boot disk
     }
   }
@@ -17,7 +19,42 @@ resource "google_compute_instance" "web" {
     }
   }
  
-  tags = ["amazone-clone"]
-
-  metadata_startup_script = file("./install_jenkins.sh")
+#metadata_startup_script = file("./install_jenkins.sh")
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    #install docker
+    apt-get update
+    apt-get install -y git
+    apt-get install -y docker.io git
+    systemctl start docker
+    systemctl enable docker
+ 
+    # Clone the repository
+    git clone https://github.com/pavanteja2704/webapp.git /tmp/your-repo
+ 
+    # Run the httpd container
+    docker run -d -p 4102:80 --name apache-container httpd
+ 
+    # Wait for the container to start
+    sleep 10
+ 
+    # Copy the repository files to the document root
+    docker cp /tmp/your-repo/. apache-container:/usr/local/apache2/htdocs/
+ 
+    # Restart the container to ensure Apache serves the new content
+    docker restart apache-container
+  EOT
+}
+# Create a firewall rule to allow HTTP traffic
+resource "google_compute_firewall" "fire" {
+  name    = "allow-http"
+  network = "default"
+ 
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+ 
+  target_tags = ["http-server"]
+  source_tags = ["webserver"]
 }
