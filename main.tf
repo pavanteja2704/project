@@ -1,8 +1,6 @@
 resource "google_compute_instance" "web" {
   name         = "web-instance-1"
   machine_type = "e2-medium"
-  region = "us-central1"
-  project = "hardy-binder-411706"
   zone         = "us-central1-a"
 
   tags = ["http-server"]
