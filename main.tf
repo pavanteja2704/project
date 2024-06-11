@@ -1,5 +1,5 @@
 resource "google_compute_instance" "web" {
-  name         = "web-instance-1"
+  name         = "web-instance"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -7,7 +7,7 @@ resource "google_compute_instance" "web" {
  
   boot_disk {
     initialize_params {
-      image =  "debian-cloud/debian-11" //rhel-cloud/rhel-9 
+      image =  "ubuntu-os-cloud/ubuntu-2004-lts"  
       size  = 50 // 50 GB boot disk
     }
   }
@@ -43,6 +43,16 @@ resource "google_compute_instance" "web" {
  
     # Restart the container to ensure Apache serves the new content
     docker restart apache-container
+
+    #Installation Of Prometheus 
+    wget https://github.com/prometheus/prometheus/releases/download/v2.50.0-rc.1/prometheus-2.50.0-rc.1.linux-amd64.tar.gz
+
+    tar xzvf prometheus-2.50.0-rc.1.linux-amd64.tar.gz
+
+    cd prometheus-2.50.0-rc.1.linux-amd64
+
+    ./prometheus &
+
   EOT
 }
 # Create a firewall rule to allow HTTP traffic
