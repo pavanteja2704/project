@@ -1,5 +1,5 @@
 resource "google_compute_instance" "web" {
-  name         = "web-instance"
+  name         = "web-instance-1"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
