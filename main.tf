@@ -1,3 +1,9 @@
+provider "google" {
+  region = "us-east1"
+  project = "hardy-binder-411706"
+  credentials = xyz.json
+}
+
 resource "google_compute_instance" "web" {
   name         = "web-instance-1"
   machine_type = "e2-medium"
