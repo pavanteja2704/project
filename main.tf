@@ -1,5 +1,5 @@
 provider "google" {
-  region = "us-east1"
+  region = "us-central1"
   project = "hardy-binder-411706"
   credentials = "xyz.json"
 }
@@ -7,14 +7,14 @@ provider "google" {
 resource "google_compute_instance" "web" {
   name         = "web-instance-1"
   machine_type = "e2-medium"
-  zone         = "us-east1-a"
+  zone         = "us-central1-a"
 
   tags = ["http-server"]
  
   boot_disk {
     initialize_params {
       image =  "ubuntu-os-cloud/ubuntu-2004-lts"  
-      size  = 50 // 50 GB boot disk
+      size  = 40 // 40 GB boot disk
     }
   }
 
