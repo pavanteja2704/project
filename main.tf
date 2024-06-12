@@ -1,7 +1,7 @@
 provider "google" {
   region = "us-east1"
   project = "hardy-binder-411706"
-  credentials = xyz.json
+  credentials = "xyz.json"
 }
 
 resource "google_compute_instance" "web" {
