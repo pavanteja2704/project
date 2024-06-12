@@ -7,7 +7,7 @@ resource "google_compute_instance" "web" {
  
   boot_disk {
     initialize_params {
-      image = "rhel-9-v20230306"
+      image = "rhel-cloud/rhel-9"
       #image =  "ubuntu-os-cloud/ubuntu-2004-lts"  
       size  = 40 // 40 GB boot disk
     }
@@ -24,18 +24,16 @@ resource "google_compute_instance" "web" {
   metadata_startup_script = <<-EOT
     #!/bin/bash
     #install docker
-    #apt-get update
-    #apt-get install -y git
-    #apt-get install -y docker.io git
     sudo yum update -y
+    sudo yum install wget -y
     sudo yum install -y yum-utils
     sudo yum-config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
     sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     sudo systemctl start docker
     echo " Docker installation done"
     sudo systemctl enable docker
-    sudo systemctl restart jenkins
- 
+    sudo yum install git -y
+  
     # Clone the repository
     git clone https://github.com/pavanteja2704/webapp.git /tmp/your-repo
  
@@ -59,6 +57,8 @@ resource "google_compute_instance" "web" {
     cd prometheus-2.50.0-rc.1.linux-amd64
 
     ./prometheus &
+
+    
 
   EOT
 }
