@@ -1,9 +1,3 @@
-provider "google" {
-  region = "us-central1"
-  project = "hardy-binder-411706"
-  credentials = "xyz.json"
-}
-
 resource "google_compute_instance" "web" {
   name         = "web-instance-1"
   machine_type = "e2-medium"
@@ -13,7 +7,8 @@ resource "google_compute_instance" "web" {
  
   boot_disk {
     initialize_params {
-      image =  "ubuntu-os-cloud/ubuntu-2004-lts"  
+      image = "rhel-9-v20230306"
+      #image =  "ubuntu-os-cloud/ubuntu-2004-lts"  
       size  = 40 // 40 GB boot disk
     }
   }
@@ -29,11 +24,17 @@ resource "google_compute_instance" "web" {
   metadata_startup_script = <<-EOT
     #!/bin/bash
     #install docker
-    apt-get update
-    apt-get install -y git
-    apt-get install -y docker.io git
-    systemctl start docker
-    systemctl enable docker
+    #apt-get update
+    #apt-get install -y git
+    #apt-get install -y docker.io git
+    sudo yum update -y
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+    sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl start docker
+    echo " Docker installation done"
+    sudo systemctl enable docker
+    sudo systemctl restart jenkins
  
     # Clone the repository
     git clone https://github.com/pavanteja2704/webapp.git /tmp/your-repo
