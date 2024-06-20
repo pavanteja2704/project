@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+
+    environment {
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('YOUR_CREDENTIALS_ID')
+        PROJECT_ID = 'hardy-binder-411706'
+        CLUSTER_NAME = 'cluster-pipeline'
+        ZONE = ''
+    }
+
+    stages {
+        stage('Setup Google Cloud SDK') {
+            steps {
+                sh 'curl -sSL https://sdk.cloud.google.com | bash'
+                sh 'source $HOME/google-cloud-sdk/path.bash.inc'
+                sh 'gcloud components update'
+                sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+                sh 'gcloud config set project $PROJECT_ID'
+            }
+        }
+
+        stage('Create GKE Cluster') {
+            steps {
+                script {
+                    def clusterExists = sh(script: "gcloud container clusters list --zone=$ZONE --filter=name:$CLUSTER_NAME --format='value(name)'", returnStdout: true).trim()
+                    if (clusterExists) {
+                        echo "Cluster already exists: ${CLUSTER_NAME}"
+                    } else {
+                        sh "gcloud container clusters create $CLUSTER_NAME --zone $ZONE"
+                    }
+                }
+            }
+        }
+
+        stage('Configure kubectl') {
+            steps {
+                sh "gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID"
+            }
+        }
+
+        stage('Deploy Apache Server') {
+            steps {
+                writeFile file: 'deployment.yaml', text: '''apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+      - name: apache
+        image: httpd:latest
+        ports:
+        - containerPort: 80
+'''
+                writeFile file: 'service.yaml', text: '''apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service
+spec:
+  selector:
+    app: apache
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+'''
+
+                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f service.yaml'
+            }
+        }
+    }
+}
