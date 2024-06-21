@@ -5,7 +5,7 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('YOUR_CREDENTIALS_ID')
         PROJECT_ID = 'hardy-binder-411706'
         CLUSTER_NAME = 'cluster-pipeline'
-        ZONE = ''
+        ZONE = 'us-centeral1-a'
     }
 
     stages {
