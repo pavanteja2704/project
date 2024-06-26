@@ -36,6 +36,53 @@
           "experimental" : true
           }" >  /etc/docker/daemon.json
 
-    
+    #google cloud sdk 
+    sudo apt-get install -y curl apt-transport-https ca-certificates gnupg
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    sudo apt-get update
+    sudo apt-get install -y google-cloud-sdk
+    echo "gcloud CLI installation completed"
+
+ # Install Trivy
+
+sudo apt-get update
+ 
+sudo apt-get install -y wget apt-transport-https ca-certificates gnupg lsb-release
+ 
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+ 
+sudo apt-get update
+
+sudo apt-get install -y trivy
+
+trivy --version
+ 
+echo "Trivy installation completed"
+
+# Install Terraform
+sudo apt-get update
+ 
+# Install required dependencies
+sudo apt-get install -y wget unzip
+ 
+# Download the latest version of Terraform
+TERRAFORM_VERSION="1.8.5"
+wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+ 
+# Unzip the downloaded file
+unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+ 
+# Move the Terraform binary to a directory included in your system's PATH
+sudo mv terraform /usr/local/bin/
+ 
+# Verify installation
+terraform --version
+ 
+echo "Terraform installation completed"
+
+
+
 
     
