@@ -1,5 +1,5 @@
 resource "google_compute_instance" "web" {
-  name         = "web-instance-1"
+  name         = "web-instance"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -61,17 +61,4 @@ resource "google_compute_instance" "web" {
     
 
   EOT
-}
-# Create a firewall rule to allow HTTP traffic
-resource "google_compute_firewall" "fire" {
-  name    = "allow-http"
-  network = "default"
- 
-  allow {
-    protocol = "tcp"
-    ports    = ["80"]
-  }
- 
-  target_tags = ["http-server"]
-  source_tags = ["webserver"]
 }
