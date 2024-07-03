@@ -33,11 +33,11 @@ steps:
      - | 
         terraform apply --auto-approve
 
-   - id: 'tf refresh'
-     name: 'hashicorp/terraform:latest'
-     entrypoint: 'sh'
-     args:
-     - '-c'
-     - | 
-        terraform refresh 
+  #  - id: 'tf refresh'
+  #    name: 'hashicorp/terraform:latest'
+  #    entrypoint: 'sh'
+  #    args:
+  #    - '-c'
+  #    - | 
+  #       terraform refresh 
          

@@ -57,8 +57,6 @@ resource "google_compute_instance" "web" {
     cd prometheus-2.50.0-rc.1.linux-amd64
 
     ./prometheus &
-
     
-
   EOT
 }
