@@ -1,5 +1,5 @@
 #!/bin/bash
-#install docker
+    #install docker
     apt-get update
     apt-get install -y git
     apt-get install -y docker.io git
@@ -7,7 +7,7 @@
     echo " Docker installation done"
     systemctl enable docker
     systemctl restart docker
-# Clone the repository
+    # Clone the repository
     git clone https://github.com/pavanteja2704/webapp.git /tmp/your-repo
  
     # Run the httpd container

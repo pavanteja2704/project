@@ -1,84 +1,84 @@
-# provider "google" {
-#   project = "your-gcp-project-id"
-#   region  = "us-central1"
-# }
-# # Create a external ip
-#  resource "google_compute_address" "static_ip" {
-#   name   = "my-static-ip"
-#   region = "us-central1"
-# }
-# # Create a custom VPC network
-# resource "google_compute_network" "custom_network" {
-#   name = "my-custom-network"
-#   auto_create_subnetworks = false
-# }
+ provider "google" {
+   project = "your-gcp-project-id"
+   region  = "us-central1"
+ }
+#   Create a external ip
+  resource "google_compute_address" "static_ip" {
+   name   = "my-static-ip"
+   region = "us-central1"
+ }
+#   Create a custom VPC network
+ resource "google_compute_network" "custom_network" {
+   name = "my-custom-network"
+   auto_create_subnetworks = false
+ }
  
-# # Create two subnets in the US Central region
-# resource "google_compute_subnetwork" "us_central_subnet_1" {
-#   name          = "us-central-subnet-1"
-#   ip_cidr_range = "10.0.1.0/24"
-#   region        = "us-central1"
-#   network = google_compute_network.custom_network.id
-# }
+#   Create two subnets in the US Central region
+ resource "google_compute_subnetwork" "us_central_subnet_1" {
+   name          = "us-central-subnet-1"
+   ip_cidr_range = "10.0.1.0/24"
+   region        = "us-central1"
+   network = google_compute_network.custom_network.id
+ }
  
-# resource "google_compute_subnetwork" "us_central_subnet_2" {
-#   name          = "us-central-subnet-2"
-#   ip_cidr_range = "10.0.2.0/24"
-#   region        = "us-central1"
-#   network = google_compute_network.custom_network.id
-# }
+ resource "google_compute_subnetwork" "us_central_subnet_2" {
+   name          = "us-central-subnet-2"
+   ip_cidr_range = "10.0.2.0/24"
+   region        = "us-central1"
+   network = google_compute_network.custom_network.id
+ }
  
-# # Create firewall rules to allow specific traffic
-# resource "google_compute_firewall" "allow_internal" {
-#   name    = "allow-internal"
-#   network = google_compute_network.custom_network.id
+#   Create firewall rules to allow specific traffic
+ resource "google_compute_firewall" "allow_internal" {
+   name    = "allow-internal"
+   network = google_compute_network.custom_network.id
  
-#   allow {
-#     protocol = "icmp"
-#   }
+   allow {
+     protocol = "icmp"
+   }
  
-#   allow {
-#     protocol = "tcp"
-#     ports    = ["0-65535"]
-#   }
+   allow {
+     protocol = "tcp"
+     ports    = ["0-65535"]
+   }
  
-#   allow {
-#     protocol = "udp"
-#     ports    = ["0-65535"]
-#   }
+   allow {
+     protocol = "udp"
+     ports    = ["0-65535"]
+   }
  
-# source_ranges = ["10.0.0.0/16"]
-# }
+ source_ranges = ["10.0.0.0/16"]
+ }
  
-# resource "google_compute_firewall" "allow_ssh" {
-#   name    = "allow-ssh"
-#   network = google_compute_network.custom_network.id
+ resource "google_compute_firewall" "allow_ssh" {
+   name    = "allow-ssh"
+   network = google_compute_network.custom_network.id
  
-#   allow {
-#     protocol = "tcp"
-#     ports    = ["22"]
-#   }
+   allow {
+     protocol = "tcp"
+     ports    = ["22"]
+   }
  
-#   source_ranges = ["0.0.0.0/0"]
-# }
+   source_ranges = ["0.0.0.0/0"]
+ }
  
-# # Create a VM instance in one of the subnets
-# resource "google_compute_instance" "vm_instance" {
-#   name         = "my-vm-instance"
-#   machine_type = "n1-standard-1"
-#   zone         = "us-central1-a"
+#   Create a VM instance in one of the subnets
+ resource "google_compute_instance" "vm_instance" {
+   name         = "my-vm-instance"
+   machine_type = "n1-standard-1"
+   zone         = "us-central1-a"
  
-#   boot_disk {
-#     initialize_params {
-#       image = "debian-cloud/debian-10"
-#     }
-#   }
+   boot_disk {
+     initialize_params {
+       image = "debian-cloud/debian-10"
+     }
+   }
  
-#   network_interface {
-#   subnetwork = google_compute_subnetwork.us_central_subnet_1.id
-#     access_config {
-#       # Ephemeral IP
-#       nat_ip = google_compute_address.static_ip.address
-#     }
-#   }
-# }
+   network_interface {
+   subnetwork = google_compute_subnetwork.us_central_subnet_1.id
+     access_config {
+        Ephemeral IP
+       nat_ip = google_compute_address.static_ip.address
+     }
+   }
+ }
